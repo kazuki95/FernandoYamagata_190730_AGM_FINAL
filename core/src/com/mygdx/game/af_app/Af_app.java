@@ -1,4 +1,4 @@
-package com.mygdx.game.flappybird_ac_final;
+package com.mygdx.game.af_app;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -20,7 +20,7 @@ public class Af_app extends ApplicationAdapter {
 
 	private SpriteBatch batch;
 	//para guardar as  texturas  que vão ser renderizadas
-	private Texture[] passaros;
+	private Texture passaros;
 	private Texture fundo;
 	private Texture canoAlto;
 	private Texture canoBaixo;
@@ -45,7 +45,6 @@ public class Af_app extends ApplicationAdapter {
 	private int moedapravalor = 0;
 	int valor = 1;
 
-	private float variacao = 0; // variação da animação
 	private float posicaoInicialVerticalPassaro = 0;// posição do passaro  na vertical
 	private float posicaoCanoHorizontal; //posição cano horizontal
 	private float posicaoCanoVertical; //posição cano vertical
@@ -125,7 +124,7 @@ public class Af_app extends ApplicationAdapter {
 		somVoando = Gdx.audio.newSound(Gdx.files.internal("som_asa.wav"));
 		somColisao = Gdx.audio.newSound(Gdx.files.internal("som_batida.wav"));
 		somPontuacao = Gdx.audio.newSound(Gdx.files.internal("som_pontos.wav"));
-		somMoedas = Gdx.audio.newSound(Gdx.files.internal("retro_coin.wav"));
+		somMoedas = Gdx.audio.newSound(Gdx.files.internal("ponto.wav"));
 
 
 		preferencias = Gdx.app.getPreferences("flappyBird");
@@ -138,19 +137,17 @@ public class Af_app extends ApplicationAdapter {
 		fundo = new Texture("fundo.png");//pegando a textura para criar
 
 		// pondo as pngs do passaro em um arrey de texturas para que forme animação na cena
-		passaros = new Texture[3];
-		passaros[0] = new Texture("passaro1.png");
-		passaros[1] = new Texture("passaro2.png");
-		passaros[2] = new Texture("passaro3.png");
+		passaros = new Texture("angry.png");
+
 		// pegando texturas do cano
 		canoAlto = new Texture("cano_topo_maior.png");
 		canoBaixo = new Texture("cano_baixo_maior.png");
 
-		moedaOuro = new Texture("coin_gold.png");
-		moedaPrata = new Texture("coin_sinlver.png");
+		moedaOuro = new Texture("ouro.png");
+		moedaPrata = new Texture("prata.png");
 
 		GameOver = new Texture("game_over.png");
-		logo = new Texture("bird go.png");
+		logo = new Texture("logo.png");
 
 
 	}
@@ -168,9 +165,9 @@ public class Af_app extends ApplicationAdapter {
 
 	private void detectarColisao() {
 
-		circuloPassaro.set(50 + passaros[0].getWidth() / 2f,
-				posicaoInicialVerticalPassaro + passaros[0].getHeight() / 2f,
-				passaros[0].getWidth() / 2f);// pondo colisao no passaro
+		circuloPassaro.set(50 + passaros.getWidth() / 2f,
+				posicaoInicialVerticalPassaro + passaros.getHeight() / 2f,
+				passaros.getWidth() / 2f);// pondo colisao no passaro
 
 		retanguloBaixo.set(posicaoCanoHorizontal, alturadispositivo / 2 - canoBaixo.getHeight() - espacoEntreCanos / 2 + posicaoCanoVertical, canoBaixo.getWidth(), canoBaixo.getHeight());// pondo colisão nos canos
 
@@ -216,7 +213,7 @@ public class Af_app extends ApplicationAdapter {
 	}
 
 	private void validarPontos() {
-		if (posicaoCanoHorizontal < 50 - passaros[0].getWidth()) {// se passar pelo cano
+		if (posicaoCanoHorizontal < 50 - passaros.getWidth()) {// se passar pelo cano
 			if (!passouCano) {// for diferente passouCano
 				pontos++; // soma pontos
 				passouCano = true;// e passouCano é verdadeiro
@@ -225,13 +222,6 @@ public class Af_app extends ApplicationAdapter {
 
 			}
 
-		}
-
-		variacao += Gdx.graphics.getDeltaTime() * 10;// velocidade da variação de pngs do passaro para a animação
-
-		if (variacao > 3) // variação para animação do passaro
-		{
-			variacao = 0; // determinado que sera 0
 		}
 	}
 
@@ -319,7 +309,7 @@ public class Af_app extends ApplicationAdapter {
 			batch.draw(logo,posicaoHorizontalPassaro,alturadispositivo /4,1200,800);
 
 		}
-		batch.draw(passaros[(int) variacao], 50 + posicaoHorizontalPassaro, posicaoInicialVerticalPassaro);// rederizando o passaro na cena
+		batch.draw(passaros, 50 + posicaoHorizontalPassaro, posicaoInicialVerticalPassaro);// rederizando o passaro na cena
 		batch.draw(canoBaixo, posicaoCanoHorizontal, alturadispositivo / 2 - canoBaixo.getHeight() - espacoEntreCanos / 2 + posicaoCanoVertical);//renderizando cano na cena e calculando conforme o tamanho da tela
 		batch.draw(canoAlto, posicaoCanoHorizontal, alturadispositivo / 2 + espacoEntreCanos / 2 + posicaoCanoVertical);//renderizando cano na cena e calculando conforme o tamanho da tela
 		textPontuacao.draw(batch, String.valueOf(pontos), larguradispositivo / 2, alturadispositivo - 100);// renderizando os pontos na tela  cada vez que passar entre os canos
