@@ -29,19 +29,18 @@ public class Af_app extends ApplicationAdapter {
 	private Texture moedaOuro;
 	private Texture logo;
 
-
 	BitmapFont textPontuacao;// para mostrar texto de pontos
 	BitmapFont textRenicia; // para mostrar remiciar jogo
-	BitmapFont textMelhorPontuacao;//para mostra melhor pontuação
+	BitmapFont textMelhorPontuacao; //para mostra melhor pontuação
 
-	private boolean passouCano = false;//  virificar se passou pelo cano se verdadeiro ou falso
+	private boolean passouCano = false; // virificar se passou pelo cano se verdadeiro ou falso
 
-	private Random random;// var para random
+	private Random random; // var para random
 
 	private int pontuacaoMaxima = 0;
-	private int pontos = 0;// var de pontos
-	private int gravidade = 0;// var de gravidade
-	private int estadojogo = 0;// var de estado do jogo
+	private int pontos = 0; // var de pontos
+	private int gravidade = 0; // var de gravidade
+	private int estadojogo = 0; // var de estado do jogo
 	private int moedapravalor = 0;
 	int valor = 1;
 
@@ -52,10 +51,9 @@ public class Af_app extends ApplicationAdapter {
 	private float alturadispositivo;// a altura do dispositivo
 	private float espacoEntreCanos;// espaço entre os canos
 	private float posicaoHorizontalPassaro = 0;
-	private float posicaoMOedaouro;
-	private float posicaoMOedaPrata;
+	private float posicaoOuro;
+	private float posicaoPrata;
 	private float posicaomoedavetical;
-
 
 	private ShapeRenderer shapeRenderer;
 	//  vars de colisão
@@ -65,7 +63,7 @@ public class Af_app extends ApplicationAdapter {
 	private Circle ciculoMoedaOuro;
 	private Circle ciculoMoedaPrata;
 
-	// son do jogo
+	// som do jogo
 	Sound somVoando;
 	Sound somColisao;
 	Sound somPontuacao;
@@ -80,7 +78,6 @@ public class Af_app extends ApplicationAdapter {
 		inicializaTexuras();// metodo para inicializar as texturas
 		inicializarObjetos();// metodo para inicializar os objetos
 
-
 	}
 
 	private void inicializarObjetos() {
@@ -88,29 +85,27 @@ public class Af_app extends ApplicationAdapter {
 		batch = new SpriteBatch();
 		random = new Random();//random
 
-
-		alturadispositivo = Gdx.graphics.getHeight();// declarando que altura e e a mesma do dispositivo
-		larguradispositivo = Gdx.graphics.getWidth();// declarando que largura e e a mesma do dispositivo
-		posicaoInicialVerticalPassaro = alturadispositivo / 2;// para pegar a metade da altura do dispositivo
+		alturadispositivo = Gdx.graphics.getHeight(); // declarando que altura e e a mesma do dispositivo
+		larguradispositivo = Gdx.graphics.getWidth(); // declarando que largura e e a mesma do dispositivo
+		posicaoInicialVerticalPassaro = alturadispositivo / 2; // para pegar a metade da altura do dispositivo
 		posicaomoedavetical = alturadispositivo / 2;
-		posicaoCanoHorizontal = larguradispositivo;//possição do cano sera a largura do dispositivo
-		posicaoMOedaouro = larguradispositivo;
-		posicaoMOedaPrata = larguradispositivo;
+		posicaoCanoHorizontal = larguradispositivo; //possição do cano sera a largura do dispositivo
+		posicaoOuro = larguradispositivo;
+		posicaoPrata = larguradispositivo;
 
 		espacoEntreCanos = 350;
 
+		textPontuacao = new BitmapFont(); // pegando a texto de pontos
+		textPontuacao.setColor(Color.WHITE); // deixando ele com  cor branca
+		textRenicia = new BitmapFont(); // pegando a texto de pontos
+		textPontuacao.getData().setScale(10); // determinado tamanho do texto
 
-		textPontuacao = new BitmapFont();// pegando a texto de pontos
-		textPontuacao.setColor(Color.WHITE);// deixando ele com  cor branca
-		textRenicia = new BitmapFont();// pegando a texto de pontos
-		textPontuacao.getData().setScale(10);// determinado tamanho do texto
+		textRenicia.setColor(Color.GREEN); // deixando ele com  cor branca
+		textRenicia.getData().setScale(3); // determinado tamanho do texto
 
-		textRenicia.setColor(Color.GREEN);// deixando ele com  cor branca
-		textRenicia.getData().setScale(3);// determinado tamanho do texto
-
-		textMelhorPontuacao = new BitmapFont();// pegando a texto de pontos
-		textMelhorPontuacao.setColor(Color.RED);// deixando ele com  cor branca
-		textMelhorPontuacao.getData().setScale(3);// determinado tamanho do texto
+		textMelhorPontuacao = new BitmapFont(); // pegando a texto de pontos
+		textMelhorPontuacao.setColor(Color.RED); // deixando ele com  cor branca
+		textMelhorPontuacao.getData().setScale(3); // determinado tamanho do texto
 
 		// pegando as colisões
 		shapeRenderer = new ShapeRenderer();
@@ -124,8 +119,7 @@ public class Af_app extends ApplicationAdapter {
 		somVoando = Gdx.audio.newSound(Gdx.files.internal("som_asa.wav"));
 		somColisao = Gdx.audio.newSound(Gdx.files.internal("som_batida.wav"));
 		somPontuacao = Gdx.audio.newSound(Gdx.files.internal("som_pontos.wav"));
-		somMoedas = Gdx.audio.newSound(Gdx.files.internal("ponto.wav"));
-
+		somMoedas = Gdx.audio.newSound(Gdx.files.internal("ponto.mp3"));
 
 		preferencias = Gdx.app.getPreferences("flappyBird");
 		pontuacaoMaxima = preferencias.getInteger("pontuacaoMaxima", 0);// para gardar maior pontuação
@@ -147,8 +141,7 @@ public class Af_app extends ApplicationAdapter {
 		moedaPrata = new Texture("prata.png");
 
 		GameOver = new Texture("game_over.png");
-		logo = new Texture("logo.png");
-
+		logo = new Texture("logo.jpg");
 
 	}
 
@@ -159,7 +152,6 @@ public class Af_app extends ApplicationAdapter {
 		desenharTexturas();// renderizando as texuras ou desenhando na cena
 		detectarColisao();// detectar as colisões  dos objetos na cena
 		validarPontos();// validando pontos quando passsa entre os canos
-
 
 	}
 
@@ -173,10 +165,10 @@ public class Af_app extends ApplicationAdapter {
 
 		retaguloCanoCima.set(posicaoCanoHorizontal, alturadispositivo / 2 + espacoEntreCanos / 2 + posicaoCanoVertical, canoAlto.getWidth(), canoAlto.getHeight());// pondo colisão nos canos
 
-		ciculoMoedaPrata.set(posicaoMOedaPrata, alturadispositivo /2 + posicaomoedavetical + moedaPrata.getHeight() / 2f,
+		ciculoMoedaPrata.set(posicaoPrata, alturadispositivo /2 + posicaomoedavetical + moedaPrata.getHeight() / 2f,
 				moedaPrata.getWidth() / 2f);
 
-		ciculoMoedaOuro.set(posicaoMOedaouro, alturadispositivo /2 + posicaomoedavetical + moedaOuro.getHeight() / 2f,
+		ciculoMoedaOuro.set(posicaoOuro, alturadispositivo /2 + posicaomoedavetical + moedaOuro.getHeight() / 2f,
 				moedaOuro.getWidth() / 2f);
 
 		boolean beteumoedaOuro = Intersector.overlaps(circuloPassaro, ciculoMoedaOuro);
@@ -191,12 +183,13 @@ public class Af_app extends ApplicationAdapter {
 
 			}
 		}
+
 		if (beteumoedaOuro) {
 			if (estadojogo == 1) {
 				pontos += 10;
 				moedapravalor = 0;
 				somMoedas.play();
-				posicaoMOedaouro = larguradispositivo;
+				posicaoOuro = larguradispositivo;
 
 			}
 		}
@@ -206,7 +199,7 @@ public class Af_app extends ApplicationAdapter {
 				pontos += 5;
 				moedapravalor++;
 				somMoedas.play();
-				posicaoMOedaPrata = larguradispositivo;
+				posicaoPrata = larguradispositivo;
 
 			}
 		}
@@ -219,9 +212,7 @@ public class Af_app extends ApplicationAdapter {
 				passouCano = true;// e passouCano é verdadeiro
 				somPontuacao.play();// dispara som de pontuação
 
-
 			}
-
 		}
 	}
 
@@ -250,16 +241,18 @@ public class Af_app extends ApplicationAdapter {
 				posicaoCanoVertical = random.nextInt(400) - 200;// posição vertical fica randomicamente mudando de valores
 				passouCano = false;
 			}
-			posicaoMOedaPrata -= Gdx.graphics.getDeltaTime() * 150;
-			if (posicaoMOedaPrata < -moedaPrata.getWidth()) {
-				posicaoMOedaPrata = larguradispositivo;
+
+			posicaoPrata -= Gdx.graphics.getDeltaTime() * 150;
+			if (posicaoPrata < -moedaPrata.getWidth()) {
+				posicaoPrata = larguradispositivo;
 				posicaomoedavetical = random.nextInt(300) - 200;
 
 			}
-			if (moedapravalor >= 5) {
-				posicaoMOedaouro -= Gdx.graphics.getDeltaTime() * 150;
-				if (posicaoMOedaouro < -moedaOuro.getWidth()) {
-					posicaoMOedaouro = larguradispositivo;
+
+			if (moedapravalor >= 3) {
+				posicaoOuro -= Gdx.graphics.getDeltaTime() * 150;
+				if (posicaoOuro < -moedaOuro.getWidth()) {
+					posicaoOuro = larguradispositivo;
 					posicaomoedavetical = random.nextInt(300) - 200;
 					moedapravalor = 0;
 				}
@@ -268,11 +261,10 @@ public class Af_app extends ApplicationAdapter {
 			if (posicaoInicialVerticalPassaro > 0 || toqueTela)
 				posicaoInicialVerticalPassaro = posicaoInicialVerticalPassaro - gravidade;
 
-
 			gravidade++;// almentando a gravidade
 
-
 		}
+
 		// estado do jogo  2 , faz que  se coliu com os canos, motre a melhor pontuação e resete o game se tocar na tela novamente
 		else if (estadojogo == 2) {
 			if (pontos > pontuacaoMaxima) // se pontuação  for  maior  que pontuação maxima, potuanção maxima  vai ser igual a pontos
@@ -291,8 +283,8 @@ public class Af_app extends ApplicationAdapter {
 				posicaoHorizontalPassaro = 0;
 				posicaoInicialVerticalPassaro = alturadispositivo / 2;
 				posicaoCanoHorizontal = larguradispositivo;
-				posicaoMOedaouro = larguradispositivo;
-				posicaoMOedaPrata = larguradispositivo;
+				posicaoOuro = larguradispositivo;
+				posicaoPrata = larguradispositivo;
 				moedapravalor = 0;
 			}
 		}
@@ -309,10 +301,33 @@ public class Af_app extends ApplicationAdapter {
 			batch.draw(logo,posicaoHorizontalPassaro,alturadispositivo /4,1200,800);
 
 		}
+
 		batch.draw(passaros, 50 + posicaoHorizontalPassaro, posicaoInicialVerticalPassaro);// rederizando o passaro na cena
 		batch.draw(canoBaixo, posicaoCanoHorizontal, alturadispositivo / 2 - canoBaixo.getHeight() - espacoEntreCanos / 2 + posicaoCanoVertical);//renderizando cano na cena e calculando conforme o tamanho da tela
 		batch.draw(canoAlto, posicaoCanoHorizontal, alturadispositivo / 2 + espacoEntreCanos / 2 + posicaoCanoVertical);//renderizando cano na cena e calculando conforme o tamanho da tela
-		textPontuacao.draw(batch, String.valueOf(pontos), larguradispositivo / 2, alturadispositivo - 100);// renderizando os pontos na tela  cada vez que passar entre os canos
+
+
+		if (moedapravalor <= 3) {
+
+			batch.draw(moedaPrata, posicaoPrata, alturadispositivo /2 + posicaomoedavetical + moedaPrata.getHeight() / 2f);
+		}
+
+		if (moedapravalor >= 3) {
+
+			batch.draw(moedaOuro, posicaoOuro, alturadispositivo /2 + posicaomoedavetical + moedaOuro.getHeight() / 2f);
+
+		}
+
+
+
+		if(estadojogo == 1)
+		{
+			textPontuacao.draw(batch, String.valueOf(pontos), larguradispositivo / 2, alturadispositivo - 100);// renderizando os pontos na tela  cada vez que passar entre os canos
+
+		}
+
+
+
 
 		// se o estado do jogo for  2 renderiza na tela a pngs  na tela dando infomação sobre o estatus que jogo se encotra
 		if (estadojogo == 2) {
@@ -320,27 +335,16 @@ public class Af_app extends ApplicationAdapter {
 			textRenicia.draw(batch, "Toque  na tela para reiniciar!", larguradispositivo / 2 - 200, alturadispositivo / 2 - GameOver.getHeight() / 2f);
 			textMelhorPontuacao.draw(batch, "Sua melhor pontuação  é : " + pontuacaoMaxima + " Pontos", larguradispositivo / 2 - 300, alturadispositivo / 2 - GameOver.getHeight() * 2);
 		}
-		if (moedapravalor <= 5) {
-
-			batch.draw(moedaPrata, posicaoMOedaPrata, alturadispositivo /2 + posicaomoedavetical + moedaPrata.getHeight() / 2f);
-		}
-
-		if (moedapravalor >= 5) {
-
-			batch.draw(moedaOuro, posicaoMOedaouro, alturadispositivo /2 + posicaomoedavetical + moedaOuro.getHeight() / 2f);
 
 
-		}
 
-		batch.end();// terminado
+		batch.end();
 
 	}
 
 	@Override
 	public void dispose() {
 
-
 	}
-
 
 }
