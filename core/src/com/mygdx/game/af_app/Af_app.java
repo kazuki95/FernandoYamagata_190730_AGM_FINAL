@@ -440,7 +440,7 @@ public class Af_app extends ApplicationAdapter {
 		}
 
 
-		//termina a sequencia da aplicação
+		//termina a sequencia da aplicação.
 		batch.end();
 
 	}
